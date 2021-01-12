@@ -17,7 +17,7 @@ function App() {
     return <Login setToken={setToken} />
   }
 
-  return <Dashboard />
+  return <Dashboard setToken={setToken} />
 }
 
 export default App;

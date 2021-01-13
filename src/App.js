@@ -1,11 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
+import { openDB } from 'idb';
+import Cookies from 'universal-cookie';
 
 import logo from './logo.svg';
 import './App.css';
 
 import Dashboard from './components/dashboard/Dashboard';
 import Login from './components/login/Login';
-import { openDB } from 'idb';
 
 function DBConfig() {
   openDB('weather_db', 1, {
@@ -19,19 +20,38 @@ function DBConfig() {
   })
 }
 
+function getCookie(cookiename, setCallback) {
+  const cookies = new Cookies();
+
+  const cookie = cookies.get(cookiename);
+    if (typeof cookie !== 'undefined') {
+      setCallback(cookie);
+    }
+}
+
 function App() {
   DBConfig();
 
   const [token, setToken] = useState();
   const [userid, setUserId] = useState(0);
+  
+  const logout = () => {
+    setToken();
+    const cookies = new Cookies();
+    cookies.remove('weather-app-login');
+    cookies.remove('weather-app-id');
+  }
 
-  if(!token) {
+  useEffect(() => {
+    getCookie('weather-app-login', setToken);
+    getCookie('weather-app-id', setUserId);
+  }, []);
+
+  /*if(!token) {
     return <Login setToken={setToken} setUserIdCallback={setUserId} />
-  }
-  if (token && userid !== 0) {
-    return <Dashboard setToken={setToken} userid={userid} />
-  }
-  return (<> </>);
+  }*/
+  
+  return <Dashboard logoutCallback={logout} userid={userid} />
 }
 
 export default App;

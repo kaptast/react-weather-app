@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Button, TextField, Container, Grid } from '@material-ui/core';
 import CityList from './CityList';
 
-export default function Dashboard({ setToken, userid }) {
+export default function Dashboard({ logoutCallback, userid }) {
     return (
         <>
             <h1>dashboard</h1>
@@ -19,6 +19,6 @@ export default function Dashboard({ setToken, userid }) {
 }
 
 Dashboard.propTypes = {
-    setToken: PropTypes.func.isRequired,
+    logoutCallback: PropTypes.func.isRequired,
     userid: PropTypes.any.isRequired
 }

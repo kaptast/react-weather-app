@@ -17,17 +17,17 @@ const useStyles = makeStyles((theme) => ({
 function setToken(userid, setTokenCallback) {
     const cookies = new Cookies();
     const token = getToken();
+    console.log(token);
     cookies.set('weather-app-login', token);
+    cookies.set('weather-app-id', userid);
     setTokenCallback(token);
 }
 
 async function doDatabaseStuff(loginName, pwd, setTokenCallback) {
-    const db = await openDB('weather_db', 1);
-
     const hashedPassword = await hashPassword(pwd);
 
-
-    const value = await db.getFromIndex('users', 'username', loginName)
+    const db = await openDB('weather_db', 1);
+    await db.getFromIndex('users', 'username', loginName)
         .then(user => {
             if (typeof user === 'undefined') {
                 console.log('user not found');
@@ -37,13 +37,13 @@ async function doDatabaseStuff(loginName, pwd, setTokenCallback) {
                     }).catch(err => {
                         console.error(err);
                     });
-                
+
             } else {
                 console.log("user found");
                 if (user.password === hashedPassword) {
                     console.log('login successful!');
                     console.log(user);
-                    setToken(setTokenCallback);
+                    setToken(user.id, setTokenCallback);
                 } else {
                     console.error('incorrect password')
                     return '';
@@ -53,7 +53,6 @@ async function doDatabaseStuff(loginName, pwd, setTokenCallback) {
         .catch(err => {
             console.error(err);
         });
-    });
 }
 
 async function handleLogin(username, password, setTokenCallback, setUserIdCallback) {
@@ -61,25 +60,22 @@ async function handleLogin(username, password, setTokenCallback, setUserIdCallba
 }
 
 async function hashPassword(password) {
-    var hashedPassword = await sha256(password);
-    console.log(hashedPassword);
-
-    return hashedPassword;
+    return await sha256(password);
 }
 
-async function getToken(){
+function getToken() {
     return makeid(30);
 }
 
 function makeid(length) {
-    var result           = '';
-    var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    var result = '';
+    var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     var charactersLength = characters.length;
-    for ( var i = 0; i < length; i++ ) {
-       result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    for (var i = 0; i < length; i++) {
+        result += characters.charAt(Math.floor(Math.random() * charactersLength));
     }
     return result;
- }
+}
 
 async function sha256(message) {
     // encode as UTF-8
@@ -156,4 +152,4 @@ export default function Login({ setToken, setUserIdCallback }) {
 Login.propTypes = {
     setToken: PropTypes.func.isRequired,
     setUserIdCallback: PropTypes.func.isRequired
-  }
+}

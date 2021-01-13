@@ -10,7 +10,7 @@ export default function Dashboard({ logoutCallback, userid }) {
             <Button
                 type="submit"
                 variant="contained"
-                onClick={(e) => setToken()}>
+                onClick={(e) => logoutCallback()}>
                 Logout
                         </Button>
             <CityList userid={userid} />

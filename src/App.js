@@ -47,9 +47,9 @@ function App() {
     getCookie('weather-app-id', setUserId);
   }, []);
 
-  /*if(!token) {
+  if(!token) {
     return <Login setToken={setToken} setUserIdCallback={setUserId} />
-  }*/
+  }
   
   return <Dashboard logoutCallback={logout} userid={userid} />
 }

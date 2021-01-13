@@ -1,8 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, TextField, Container, Grid } from '@material-ui/core';
+import CityList from './CityList';
 
-export default function Dashboard({ setToken }) {
+export default function Dashboard({ setToken, userid }) {
     return (
         <>
             <h1>dashboard</h1>
@@ -12,10 +13,12 @@ export default function Dashboard({ setToken }) {
                 onClick={(e) => setToken()}>
                 Logout
                         </Button>
+            <CityList userid={userid} />
         </>
     );
 }
 
 Dashboard.propTypes = {
-    setToken: PropTypes.func.isRequired
+    setToken: PropTypes.func.isRequired,
+    userid: PropTypes.any.isRequired
 }

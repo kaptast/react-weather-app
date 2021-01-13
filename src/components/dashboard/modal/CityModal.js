@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Dialog from '@material-ui/core/Dialog';
-import Button from '@material-ui/core/Button';
-import CityModalForm from './CityModalForm';
+import IconButton from '@material-ui/core/IconButton';
+import AddIcon from '@material-ui/icons/Add';
 import CityModalFrom from './CityModalForm';
 
 export default function CityModal({ userid }) {
@@ -18,9 +18,9 @@ export default function CityModal({ userid }) {
 
     return (
         <div>
-            <Button onClick={handleOpen}>
-                +
-            </Button>
+            <IconButton onClick={handleOpen}>
+                <AddIcon />
+            </IconButton>
             <Dialog onClose={handleClose} aria-labelledby="simple-dialog-title" open={open}>
                 <CityModalFrom userid={userid}/>
             </Dialog>

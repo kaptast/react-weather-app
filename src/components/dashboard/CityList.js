@@ -1,36 +1,25 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Box from '@material-ui/core/Box';
-import { openDB } from 'idb';
+import IconButton from '@material-ui/core/IconButton';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import City from './city/City';
 import CityModal from './modal/CityModal';
 
-export default function CityList({ userid }) {
+const useStyles = makeStyles((theme) => ({
+    tabs: {
+      flexGrow: 1,
+    }
+}));
+
+export default function CityList({ cities, userid, logoutCallback }) {
+    const classes = useStyles();
     const [value, setValue] = useState(0);
-    const [cities, setCities] = useState([]);
-
-    useEffect(() => {
-
-        openDB('weather_db', 1).then(db => {
-            console.log("querying cities");
-            console.log(userid);
-            db.getAllFromIndex('cities', 'userid', userid)
-                .then(userCities => {
-                    console.log(userCities);
-                    if (Array.isArray(userCities)) {
-                        console.log('setting cities');
-                        setCities(userCities);
-                    }
-                })
-                .catch(err => {
-                    console.error(err);
-                });
-        })
-
-    }, [userid]);
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
@@ -39,20 +28,26 @@ export default function CityList({ userid }) {
     return (
         <div>
             <AppBar position="static" color="default">
-                <Tabs
-                    value={value}
-                    onChange={handleChange}
-                    indicatorColor="primary"
-                    textColor="primary"
-                    variant="scrollable"
-                    scrollButtons="auto"
-                    aria-label="scrollable auto tabs example"
-                >
-                    {cities.map(city => (
-                        <Tab label={city.cityname} />
-                    ))}
-                    <CityModal userid={userid} />
-                </Tabs>
+                <Toolbar>
+                    <Tabs
+                        className={classes.tabs}
+                        value={value}
+                        onChange={handleChange}
+                        indicatorColor="primary"
+                        textColor="primary"
+                        variant="scrollable"
+                        scrollButtons="auto"
+                        aria-label="scrollable auto tabs"
+                    >
+                        {cities.map(city => (
+                            <Tab label={city.cityname} />
+                        ))}
+                        <CityModal userid={userid} />
+                    </Tabs>
+                    <IconButton color="inherit" onClick={(e) => logoutCallback()}>
+                        <ExitToAppIcon />
+                    </IconButton>
+                </Toolbar>
             </AppBar>
             {cities.map((city, index) => (
                 <TabPanel value={value} index={index}>
@@ -64,7 +59,9 @@ export default function CityList({ userid }) {
 }
 
 CityList.propTypes = {
-    userid: PropTypes.any.isRequired
+    cities: PropTypes.any.isRequired,
+    userid: PropTypes.any.isRequired,
+    logoutCallback: PropTypes.func.isRequired
 }
 
 function TabPanel(props) {

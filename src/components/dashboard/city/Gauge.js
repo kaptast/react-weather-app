@@ -6,7 +6,7 @@ export default function Gauge({ name, value, unit }) {
     return (
         <Grid
             item
-            sm={"3"}
+            sm={2}
             container
             direction="column"
             justify="center"

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip } from 'recharts';
+import { ResponsiveContainer, LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip } from 'recharts';
 import axios from 'axios';
 
 export default function HumidityChart(props) {
@@ -21,12 +21,16 @@ export default function HumidityChart(props) {
     }, [props.cityname]);
 
     return (
-        <LineChart width={600} height={300} data={fiveDayData}>
-            <Line type="monotone" dataKey="temp" stroke="#8884d8" />
-            <CartesianGrid stroke="#ccc" />
-            <XAxis dataKey="date" />
-            <YAxis />
-            <Tooltip />
-        </LineChart>
+        <div style={{ width: '80%', height: 300 }}>
+            <ResponsiveContainer>
+                <LineChart data={fiveDayData}>
+                    <Line type="monotone" dataKey="temp" stroke="#8884d8" />
+                    <CartesianGrid stroke="#ccc" />
+                    <XAxis dataKey="date" />
+                    <YAxis />
+                    <Tooltip />
+                </LineChart>
+            </ResponsiveContainer>
+        </div>
     );
 }

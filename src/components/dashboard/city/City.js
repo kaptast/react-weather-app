@@ -50,6 +50,7 @@ export default function City(props) {
                 <Gauge name={"Wind direction"} value={degToCompass(currentWeather.wind.deg)} />
             </Grid>
             <Grid 
+                container
                 item 
                 justify="center"
                 alignItems="center">

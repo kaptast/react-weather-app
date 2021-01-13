@@ -12,8 +12,6 @@ export default function CityList({ userid }) {
     const [value, setValue] = useState(0);
     const [cities, setCities] = useState([]);
 
-    console.log(userid);
-
     useEffect(() => {
 
         openDB('weather_db', 1).then(db => {
@@ -50,17 +48,17 @@ export default function CityList({ userid }) {
                     scrollButtons="auto"
                     aria-label="scrollable auto tabs example"
                 >
-                    {cities.map(city => {
-                        <Tab label={city.name} />
-                    })}
+                    {cities.map(city => (
+                        <Tab label={city.cityname} />
+                    ))}
                     <CityModal userid={userid} />
                 </Tabs>
             </AppBar>
-            {cities.map((city, index) => {
+            {cities.map((city, index) => (
                 <TabPanel value={value} index={index}>
                     <City city={city} />
                 </TabPanel>
-            })}
+            ))}
         </div>
     );
 }

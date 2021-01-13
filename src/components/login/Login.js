@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Button, TextField, Container, Grid } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { openDB } from 'idb';
+import Cookies from 'universal-cookie';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -13,23 +14,31 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
+function setToken(setTokenCallback) {
+    const cookies = new Cookies();
+    const token = getToken();
+    cookies.set('weather-app-login', token);
+    setTokenCallback(token);
+}
+
 async function doDatabaseStuff(loginName, pwd, setTokenCallback) {
     const db = await openDB('weather_db', 1);
 
     const hashedPassword = await hashPassword(pwd);
+
 
     const value = await db.getFromIndex('users', 'username', loginName)
         .then(user => {
             if (typeof user === 'undefined') {
                 console.log('user not found');
                 db.add('users', { username: loginName, password: hashedPassword });
-                setTokenCallback(getToken());
+                setToken(setTokenCallback);
             } else {
                 console.log("user found");
                 if (user.password === hashedPassword) {
                     console.log('login successful!');
                     console.log(user);
-                    setTokenCallback(getToken());
+                    setToken(setTokenCallback);
                 } else {
                     console.error('incorrect password')
                     return '';

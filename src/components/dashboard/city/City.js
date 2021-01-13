@@ -49,7 +49,10 @@ export default function City(props) {
                 <Gauge name={"Wind speed"} value={currentWeather.wind.speed} unit={"m/s"} />
                 <Gauge name={"Wind direction"} value={degToCompass(currentWeather.wind.deg)} />
             </Grid>
-            <Grid item>
+            <Grid 
+                item 
+                justify="center"
+                alignItems="center">
                 <HumidityChart cityname={props.city.cityname} />
             </Grid>
         </Grid>

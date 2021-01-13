@@ -5,9 +5,10 @@ import { openDB } from 'idb';
 
 export default function Dashboard({ logoutCallback, userid }) {
     const [cities, setCities] = useState([]);
+    const [newCity, setNewCity] = useState(false);
 
     useEffect(() => {
-
+        setNewCity(false);
         openDB('weather_db', 1).then(db => {
             console.log("querying cities");
             console.log(userid);
@@ -24,10 +25,10 @@ export default function Dashboard({ logoutCallback, userid }) {
                 });
         })
 
-    }, [userid]);
+    }, [userid, newCity]);
 
     return (
-        <CityList cities={cities} userid={userid} logoutCallback={logoutCallback} />
+        <CityList cities={cities} userid={userid} logoutCallback={logoutCallback} setCitiesCallback={setNewCity} />
     );
 }
 

@@ -17,7 +17,7 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-export default function CityList({ cities, userid, logoutCallback }) {
+export default function CityList({ cities, userid, logoutCallback, setCitiesCallback }) {
     const classes = useStyles();
     const [value, setValue] = useState(0);
 
@@ -42,7 +42,7 @@ export default function CityList({ cities, userid, logoutCallback }) {
                         {cities.map(city => (
                             <Tab label={city.cityname} />
                         ))}
-                        <CityModal userid={userid} />
+                        <CityModal userid={userid} setCitiesCallback={setCitiesCallback} />
                     </Tabs>
                     <IconButton color="inherit" onClick={(e) => logoutCallback()}>
                         <ExitToAppIcon />
@@ -51,7 +51,7 @@ export default function CityList({ cities, userid, logoutCallback }) {
             </AppBar>
             {cities.map((city, index) => (
                 <TabPanel value={value} index={index}>
-                    <City city={city} />
+                    <City city={city} setCitiesCallback={setCitiesCallback} />
                 </TabPanel>
             ))}
         </div>
@@ -61,7 +61,8 @@ export default function CityList({ cities, userid, logoutCallback }) {
 CityList.propTypes = {
     cities: PropTypes.any.isRequired,
     userid: PropTypes.any.isRequired,
-    logoutCallback: PropTypes.func.isRequired
+    logoutCallback: PropTypes.func.isRequired,
+    setCitiesCallback: PropTypes.func.isRequired
 }
 
 function TabPanel(props) {

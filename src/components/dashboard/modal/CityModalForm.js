@@ -3,27 +3,27 @@ import { Grid, Button, TextField } from '@material-ui/core';
 import { openDB } from 'idb';
 
 
-async function addCity(userid, cityname) {
+async function addCity(userid, cityname, handleClose, setCitiesCallback) {
     const db = await openDB('weather_db', 1);
     db.add('cities', { cityname: cityname, userid: userid })
         .then(cityid => {
             console.log('city added');
             console.log(cityid);
-            // add city to list
-            //setTokenCallback(getToken());
-            //setUserIdCallback(userid);
+
+            setCitiesCallback(true);
+            handleClose();
         }).catch(err => {
             console.error(err);
         });
 }
 
-export default function CityModalFrom({ userid }) {
+export default function CityModalFrom({ userid, handleClose, setCitiesCallback }) {
     const [cityName, setCityName] = useState();
 
     const handleSubmit = event => {
         event.preventDefault();
 
-        addCity(userid, cityName);
+        addCity(userid, cityName, handleClose, setCitiesCallback);
     }
 
     return (

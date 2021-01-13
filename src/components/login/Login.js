@@ -14,7 +14,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-function setToken(setTokenCallback) {
+function setToken(userid, setTokenCallback) {
     const cookies = new Cookies();
     const token = getToken();
     cookies.set('weather-app-login', token);
@@ -31,8 +31,13 @@ async function doDatabaseStuff(loginName, pwd, setTokenCallback) {
         .then(user => {
             if (typeof user === 'undefined') {
                 console.log('user not found');
-                db.add('users', { username: loginName, password: hashedPassword });
-                setToken(setTokenCallback);
+                db.add('users', { username: loginName, password: hashedPassword })
+                    .then(userid => {
+                        setToken(userid, setTokenCallback);
+                    }).catch(err => {
+                        console.error(err);
+                    });
+                
             } else {
                 console.log("user found");
                 if (user.password === hashedPassword) {
@@ -48,10 +53,11 @@ async function doDatabaseStuff(loginName, pwd, setTokenCallback) {
         .catch(err => {
             console.error(err);
         });
+    });
 }
 
-async function handleLogin(username, password, setTokenCallback) {
-    await doDatabaseStuff(username, password, setTokenCallback);
+async function handleLogin(username, password, setTokenCallback, setUserIdCallback) {
+    doDatabaseStuff(username, password, setTokenCallback, setUserIdCallback);
 }
 
 async function hashPassword(password) {
@@ -90,7 +96,7 @@ async function sha256(message) {
     return hashHex;
 }
 
-export default function Login({ setToken }) {
+export default function Login({ setToken, setUserIdCallback }) {
     const classes = useStyles();
 
     const [username, setUsername] = useState('');
@@ -99,7 +105,7 @@ export default function Login({ setToken }) {
     const handleSubmit = event => {
         event.preventDefault();
 
-        handleLogin(username, password, setToken);
+        handleLogin(username, password, setToken, setUserIdCallback);
     }
 
     return (
@@ -148,5 +154,6 @@ export default function Login({ setToken }) {
 }
 
 Login.propTypes = {
-    setToken: PropTypes.func.isRequired
+    setToken: PropTypes.func.isRequired,
+    setUserIdCallback: PropTypes.func.isRequired
   }

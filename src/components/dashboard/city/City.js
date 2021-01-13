@@ -3,6 +3,7 @@ import axios from 'axios';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import Gauge from './Gauge';
+import HumidityChart from './HumidityChart';
 
 const defaultData = {
     main: {
@@ -49,7 +50,7 @@ export default function City(props) {
                 <Gauge name={"Wind direction"} value={degToCompass(currentWeather.wind.deg)} />
             </Grid>
             <Grid item>
-                chart
+                <HumidityChart cityname={props.city.cityname} />
             </Grid>
         </Grid>
     );

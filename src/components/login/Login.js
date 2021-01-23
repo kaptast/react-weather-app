@@ -14,16 +14,17 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-function setToken(userid, setTokenCallback) {
+function setToken(userid, setTokenCallback, setUserIdCallback) {
     const cookies = new Cookies();
     const token = getToken();
     console.log(token);
     cookies.set('weather-app-login', token);
-    cookies.set('weather-app-id', userid);
+    cookies.set('weather-app-id', parseInt(userid));
     setTokenCallback(token);
+    setUserIdCallback(parseInt(userid));
 }
 
-async function doDatabaseStuff(loginName, pwd, setTokenCallback) {
+async function doDatabaseStuff(loginName, pwd, setTokenCallback, setUserIdCallback) {
     const hashedPassword = await hashPassword(pwd);
 
     const db = await openDB('weather_db', 1);
@@ -33,7 +34,7 @@ async function doDatabaseStuff(loginName, pwd, setTokenCallback) {
                 console.log('user not found');
                 db.add('users', { username: loginName, password: hashedPassword })
                     .then(userid => {
-                        setToken(userid, setTokenCallback);
+                        setToken(userid, setTokenCallback, setUserIdCallback);
                     }).catch(err => {
                         console.error(err);
                     });
@@ -43,7 +44,7 @@ async function doDatabaseStuff(loginName, pwd, setTokenCallback) {
                 if (user.password === hashedPassword) {
                     console.log('login successful!');
                     console.log(user);
-                    setToken(user.id, setTokenCallback);
+                    setToken(user.id, setTokenCallback, setUserIdCallback);
                 } else {
                     console.error('incorrect password')
                     return '';

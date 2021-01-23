@@ -1,7 +1,15 @@
 import React, { useState } from 'react';
 import { Grid, Button, TextField } from '@material-ui/core';
 import { openDB } from 'idb';
+import { makeStyles } from '@material-ui/core/styles';
 
+const useStyles = makeStyles((theme) => ({
+    form: {
+      flexGrow: 1,
+      minHeight: '150px',
+      minWidth: '250px'
+    }
+}));
 
 async function addCity(userid, cityname, handleClose, setCitiesCallback) {
     const db = await openDB('weather_db', 1);
@@ -19,6 +27,7 @@ async function addCity(userid, cityname, handleClose, setCitiesCallback) {
 
 export default function CityModalFrom({ userid, handleClose, setCitiesCallback }) {
     const [cityName, setCityName] = useState();
+    const classes = useStyles();
 
     const handleSubmit = event => {
         event.preventDefault();
@@ -27,7 +36,7 @@ export default function CityModalFrom({ userid, handleClose, setCitiesCallback }
     }
 
     return (
-        <form onSubmit={handleSubmit}>
+        <form className={classes.form} onSubmit={handleSubmit}>
             <Grid
                 container
                 direction="column"

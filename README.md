@@ -4,8 +4,8 @@
 
 Set `REACT_APP_WEATHER_KEY` in `.env` or `.env.development`.
 
-### `yarn start`
+## Run development server
 
-Runs the app in the development mode.\
+Run `yarn start` or `npm start`. 
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
